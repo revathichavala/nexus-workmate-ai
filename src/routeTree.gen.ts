@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as SkillsRouteImport } from './routes/skills'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as GovernanceRouteImport } from './routes/governance'
 import { Route as ExecutiveRouteImport } from './routes/executive'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -25,6 +26,11 @@ const TrustRoute = TrustRouteImport.update({
 const SkillsRoute = SkillsRouteImport.update({
   id: '/skills',
   path: '/skills',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GovernanceRoute = GovernanceRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/executive': typeof ExecutiveRoute
   '/governance': typeof GovernanceRoute
+  '/onboarding': typeof OnboardingRoute
   '/skills': typeof SkillsRoute
   '/trust': typeof TrustRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/executive': typeof ExecutiveRoute
   '/governance': typeof GovernanceRoute
+  '/onboarding': typeof OnboardingRoute
   '/skills': typeof SkillsRoute
   '/trust': typeof TrustRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/executive': typeof ExecutiveRoute
   '/governance': typeof GovernanceRoute
+  '/onboarding': typeof OnboardingRoute
   '/skills': typeof SkillsRoute
   '/trust': typeof TrustRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/executive'
     | '/governance'
+    | '/onboarding'
     | '/skills'
     | '/trust'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/executive'
     | '/governance'
+    | '/onboarding'
     | '/skills'
     | '/trust'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/executive'
     | '/governance'
+    | '/onboarding'
     | '/skills'
     | '/trust'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   ExecutiveRoute: typeof ExecutiveRoute
   GovernanceRoute: typeof GovernanceRoute
+  OnboardingRoute: typeof OnboardingRoute
   SkillsRoute: typeof SkillsRoute
   TrustRoute: typeof TrustRoute
 }
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/skills'
       fullPath: '/skills'
       preLoaderRoute: typeof SkillsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/governance': {
@@ -181,19 +201,10 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   ExecutiveRoute: ExecutiveRoute,
   GovernanceRoute: GovernanceRoute,
+  OnboardingRoute: OnboardingRoute,
   SkillsRoute: SkillsRoute,
   TrustRoute: TrustRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
