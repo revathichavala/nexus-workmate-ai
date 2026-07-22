@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppLayout } from "@/components/AppLayout";
+import { useProfile } from "@/hooks/use-profile";
 import { CheckCircle2, Circle, Clock, Sparkles, TrendingUp, GitBranch, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard")({
@@ -22,8 +23,10 @@ const TASKS = [
 ];
 
 function Dashboard() {
+  const { profile } = useProfile();
+  const firstName = profile?.name?.split(" ")[0] ?? "there";
   return (
-    <AppLayout title="Good morning, Aditya" subtitle="Wednesday · 4 tasks assigned · 2 code reviews pending">
+    <AppLayout title={`Good morning, ${firstName}`} subtitle="Today · 4 tasks assigned · 2 code reviews pending">
       {/* KPI row */}
       <div className="grid md:grid-cols-4 gap-4">
         {[
