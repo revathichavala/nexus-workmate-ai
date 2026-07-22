@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   Sparkles,
@@ -10,7 +10,8 @@ import {
   Search,
   Cpu,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
+import { useProfile, initials } from "@/hooks/use-profile";
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -23,6 +24,22 @@ const NAV = [
 
 export function AppLayout({ children, title, subtitle }: { children: ReactNode; title: string; subtitle?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+  const { profile, ready } = useProfile();
+
+  useEffect(() => {
+    if (ready && !profile) navigate({ to: "/onboarding" });
+  }, [ready, profile, navigate]);
+
+  if (!ready || !profile) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-gradient-surface text-sm text-muted-foreground">
+        Loading your workspace…
+      </div>
+    );
+  }
+
+
 
   return (
     <div className="min-h-screen bg-gradient-surface">
@@ -89,15 +106,15 @@ export function AppLayout({ children, title, subtitle }: { children: ReactNode; 
                   <Bell className="h-4 w-4 text-foreground" />
                   <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-destructive" />
                 </button>
-                <div className="flex items-center gap-2 pl-2 border-l border-border">
+                <Link to="/onboarding" className="flex items-center gap-2 pl-2 border-l border-border hover:opacity-90" title="Edit profile">
                   <div className="h-8 w-8 rounded-full bg-gradient-primary grid place-items-center text-primary-foreground text-xs font-semibold">
-                    AR
+                    {initials(profile.name)}
                   </div>
-                  <div className="hidden sm:block text-xs">
-                    <div className="font-medium text-foreground">Aditya R.</div>
-                    <div className="text-muted-foreground">Cloud Engineer</div>
+                  <div className="hidden sm:block text-xs text-left">
+                    <div className="font-medium text-foreground">{profile.name}</div>
+                    <div className="text-muted-foreground">{profile.role}</div>
                   </div>
-                </div>
+                </Link>
               </div>
             </div>
           </header>
