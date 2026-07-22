@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
       { title: "NexusOps AI — Enterprise AI Adoption Intelligence" },
       { name: "description", content: "Contextual AI assistance, upskilling, governance, trust validation and ROI measurement — unified for enterprise AI adoption." },
       { property: "og:title", content: "NexusOps AI — Enterprise AI Adoption Intelligence" },
-      { property: "og:description", content: "One platform to learn AI while working, use AI safely, govern automatically, and measure business impact." },
+      { property: "og:description", content: "Contextual AI assistance, upskilling, governance, trust validation and ROI measurement — unified for enterprise AI adoption." },
     ],
   }),
   component: Landing,
